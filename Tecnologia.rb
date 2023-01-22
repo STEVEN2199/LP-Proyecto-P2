@@ -1,4 +1,4 @@
-class Instrumentos
+class Tecnologia
   # Getters, Setters
   attr_accessor :nombre, :precio, :img
 
@@ -10,7 +10,7 @@ class Instrumentos
 
   # Funcion guardar en el archivo movies.csv
   def guardar
-    CSV.open('instrumentos.csv', 'a') do |csv|
+    CSV.open('tecnologia.csv', 'a') do |csv|
       # csv << %w[Nombre Precio Img]
       csv << [@nombre.to_s, @precio.to_s, @img.to_s]
     end
