@@ -41,6 +41,16 @@ with open('topCategorias.csv','r') as csvfile3:
     for row in plots3:
         x3.append(row[0])
         y3.append(row[1])
+        
+##################################################################
+x4 = []
+y4 = []
+with open('productosStock.csv','r') as csvfile4:
+    plots4 = csv.reader(csvfile4, delimiter = ',')
+      
+    for row in plots4:
+        x4.append(row[0])
+        y4.append(int(row[1]))
 ##################################################################
 print(y)
 app = Dash(__name__)
@@ -61,10 +71,15 @@ df3 = pd.DataFrame({
     "Costo Producto": y3,
     "Referencia": z3
 })
+
+df4 = pd.DataFrame(dict(
+    r=y4,
+    theta=x4))
 ############################################################################################################
 fig = px.bar(df, x="Nombre Producto", y="Costo Producto", color="Referencia", barmode="group", log_y = True)
 fig2 = go.Figure(data=[go.Pie(labels=x2, values=y2, pull=[0, 0.1, 0, 0])])
 fig3 = px.bar(df3, x="Nombre Producto", y="Costo Producto", color="Referencia", barmode="group",log_y = True)
+fig4 = px.line_polar(df4, r='r', theta='theta', line_close=True, log_r = True)
 ############################################################################################################
 fig.update_layout(
     plot_bgcolor=colors['background'],
@@ -124,6 +139,23 @@ app.layout = html.Div(style={'backgroundColor': colors['background']}, children=
     dcc.Graph(
         id='example-graph-3',
         figure=fig3
+    ),
+    html.H1(
+        children='Dashboard De Stock De Productos',
+        style={
+            'textAlign': 'center',
+            'color': colors['text']
+        }
+    ),
+
+    html.Div(children='En este dashboard podemos observar la cantidad de productos disponibles de cada categoria.', style={
+        'textAlign': 'center',
+        'color': colors['text']
+    }),
+
+    dcc.Graph(
+        id='example-graph-4',
+        figure=fig4
     )
     
 ])
