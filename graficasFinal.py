@@ -35,7 +35,7 @@ with open('promediosCategorias.csv','r') as csvfile2:
 x3 = []
 y3 = []
 z3 = ["Audio", "Iluminacion","Tecnologia","Grabacion","Instrumentos"]  
-with open('top3categorias.csv','r') as csvfile3:
+with open('topCategorias.csv','r') as csvfile3:
     plots3 = csv.reader(csvfile3, delimiter = ',')
       
     for row in plots3:

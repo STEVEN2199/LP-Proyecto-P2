@@ -74,7 +74,7 @@ elements_container.css('.sales-flash-overlay').each do |item_post|
   arr_instrumentos_top3.push(precio.to_f)
   arr_instrumentos_top3_nombre.push(nombre[0..23])
   instrumentos = Instrumentos.new(nombre, precio, img)
-  instrumentos.guardar
+  #instrumentos.guardar
   count1 += 1
 end
 
@@ -109,7 +109,7 @@ elements_container2.css('.sales-flash-overlay').each do |item_post2|
   arr_audio_top3.push(precio2.to_f)
   arr_audio_top3_nombre.push(nombre2[0..23])
   audio = Audio.new(nombre2, precio2, img2)
-  audio.guardar
+  #audio.guardar
   count2 += 1
 end
 
@@ -144,7 +144,7 @@ elements_container3.css('.sales-flash-overlay').each do |item_post3|
   arr_iluminacion_top3.push(precio3.to_f)
   arr_iluminacion_top3_nombre.push(nombre3[0..23])
   iluminacion = Iluminacion.new(nombre3, precio3, img3)
-  iluminacion.guardar
+  #iluminacion.guardar
   count3 += 1
 end
 
@@ -179,7 +179,7 @@ elements_container4.css('.sales-flash-overlay').each do |item_post4|
   arr_grabacion_top3.push(precio4.to_f)
   arr_grabacion_top3_nombre.push(nombre4[0..23])
   grabacion = EstudioGrabacion.new(nombre4, precio4, img4)
-  grabacion.guardar
+  #grabacion.guardar
   count4 += 1
 end
 ################################################################
@@ -213,7 +213,7 @@ elements_container5.css('.sales-flash-overlay').each do |item_post5|
   arr_tecnologia_top3.push(precio5.to_f)
   arr_tecnologia_top3_nombre.push(nombre5[0..23])
   tecnologia = Tecnologia.new(nombre5, precio5, img5)
-  tecnologia.guardar
+  #tecnologia.guardar
   count5 += 1
 end
 
@@ -233,7 +233,7 @@ indice = arr_total_top3_nombres.length
 end
 
 (0..indice - 1).each do |i|
-  CSV.open('top3categorias.csv', 'a') do |csv|
+  CSV.open('topCategorias.csv', 'a') do |csv|
     # csv << %w[Nombre Precio Img]
     csv << [arr_total_top3_nombres_ordenado[i].to_s, arr_total_top3_ordenado[i].to_f]
   end
