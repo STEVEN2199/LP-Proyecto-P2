@@ -7,6 +7,7 @@ load 'Iluminacion.rb'
 load 'EstudioGrabacion.rb'
 load 'Tecnologia.rb'
 
+################Arreglos para guardar informacion################
 arr_prom_total_audio = []
 arr_audio_top3 = []
 arr_audio_top3_nombre = []
@@ -27,11 +28,28 @@ arr_prom_total_tecnologia = []
 arr_tecnologia_top3 = []
 arr_tecnologia_top3_nombre = []
 
+arr_total_precios_tecnologia = []
+arr_total_nombre_tecnologia = []
+
+arr_total_precios_audio = []
+arr_total_nombre_audio = []
+
+arr_total_precios_instrumentos = []
+arr_total_nombre_instrumentos = []
+
+arr_total_precios_iluminacion = []
+arr_total_nombre_iluminacion = []
+
+arr_total_precios_grabacion = []
+arr_total_nombre_grabacion = []
+################Arreglos para guardar informacion################
+
+################################################################
+# Categoria Instrumentos
 link = 'https://eckomusic.com/categoria-producto/instrumentos-musicales/?orderby=popularity'
 count1 = 0
 eckomusicHTML = URI.open(link)
 datos = eckomusicHTML.read
-# puts datos
 parsed_content = Nokogiri::HTML(datos)
 
 elements_container = parsed_content.css('.products')
@@ -46,6 +64,11 @@ elements_container.css('.sales-flash-overlay').each do |item_post|
 
   arr_prom_total_instrumentos.push(precio.to_i) unless precio.include?('$')
 
+  unless precio.include?('$')
+    arr_total_precios_instrumentos.push(precio.to_f)
+    arr_total_nombre_instrumentos.push(nombre[0..23])
+  end
+
   next unless count1 < 1
 
   arr_instrumentos_top3.push(precio.to_f)
@@ -54,6 +77,7 @@ elements_container.css('.sales-flash-overlay').each do |item_post|
   instrumentos.guardar
   count1 += 1
 end
+
 ################################################################
 # Categoria Audio
 link2 = 'https://eckomusic.com/categoria-producto/audio/?orderby=popularity'
@@ -75,6 +99,11 @@ elements_container2.css('.sales-flash-overlay').each do |item_post2|
 
   arr_prom_total_audio.push(precio2.to_i) unless precio2.include?('$')
 
+  unless precio2.include?('$')
+    arr_total_precios_audio.push(precio2.to_f)
+    arr_total_nombre_audio.push(nombre2[0..23])
+  end
+
   next unless count2 < 1
 
   arr_audio_top3.push(precio2.to_f)
@@ -85,7 +114,7 @@ elements_container2.css('.sales-flash-overlay').each do |item_post2|
 end
 
 ################################################################
-# Categoria Audio
+# Categoria Iluminacion
 link3 = 'https://eckomusic.com/categoria-producto/iluminacion/?orderby=popularity'
 count3 = 0
 eckomusicHTML3 = URI.open(link3)
@@ -104,6 +133,11 @@ elements_container3.css('.sales-flash-overlay').each do |item_post3|
   puts img3
 
   arr_prom_total_iluminacion.push(precio3.to_i) unless precio3.include?('$')
+
+  unless precio3.include?('$')
+    arr_total_precios_iluminacion.push(precio3.to_f)
+    arr_total_nombre_iluminacion.push(nombre3[0..23])
+  end
 
   next unless count3 < 1
 
@@ -135,6 +169,11 @@ elements_container4.css('.sales-flash-overlay').each do |item_post4|
 
   arr_prom_total_grabacion.push(precio4.to_i) unless precio4.include?('$')
 
+  unless precio4.include?('$')
+    arr_total_precios_grabacion.push(precio4.to_f)
+    arr_total_nombre_grabacion.push(nombre4[0..23])
+  end
+
   next unless count4 < 1
 
   arr_grabacion_top3.push(precio4.to_f)
@@ -164,6 +203,11 @@ elements_container5.css('.sales-flash-overlay').each do |item_post5|
 
   arr_prom_total_tecnologia.push(precio5.to_i) unless precio5.include?('$')
 
+  unless precio5.include?('$')
+    arr_total_precios_tecnologia.push(precio5.to_f)
+    arr_total_nombre_tecnologia.push(nombre5[0..23])
+  end
+
   next unless count5 < 1
 
   arr_tecnologia_top3.push(precio5.to_f)
@@ -172,6 +216,8 @@ elements_container5.css('.sales-flash-overlay').each do |item_post5|
   tecnologia.guardar
   count5 += 1
 end
+
+###############Arreglo De Los Top De Cada Categoria#######################
 arr_total_top3 = arr_audio_top3 + arr_iluminacion_top3 + arr_tecnologia_top3 + arr_grabacion_top3 + arr_instrumentos_top3
 
 arr_total_top3_nombres = arr_audio_top3_nombre + arr_iluminacion_top3_nombre + arr_tecnologia_top3_nombre + arr_grabacion_top3_nombre + arr_instrumentos_top3_nombre
@@ -192,10 +238,11 @@ end
     csv << [arr_total_top3_nombres_ordenado[i].to_s, arr_total_top3_ordenado[i].to_f]
   end
 end
+###############Arreglo De Los Top De Cada Categoria#######################
+# puts arr_total_top3_nombres_ordenado
+# puts arr_total_top3_ordenado
 
-puts arr_total_top3_nombres_ordenado
-puts arr_total_top3_ordenado
-
+######################Promedios Para Pie Chart#########################
 prom_tecnologia = arr_prom_total_tecnologia.sum / arr_prom_total_tecnologia.length
 
 prom_audio = arr_prom_total_audio.sum / arr_prom_total_audio.length
@@ -216,3 +263,204 @@ indice2 = arr_promedios_totales.length
     csv << [arr_categorias[i].to_s, arr_promedios_totales[i].to_i]
   end
 end
+######################Promedios Para Pie Chart#########################
+
+######################Ordenar Elementos#########################
+arr_total_precios_tecnologia_ordenado = arr_total_precios_tecnologia.sort
+arr_total_nombre_tecnologia_ordenado = []
+indiceTecnlogia = arr_total_nombre_tecnologia.length
+(0..indiceTecnlogia - 1).each do |i|
+  (0..indiceTecnlogia - 1).each do |j|
+    if arr_total_precios_tecnologia[i] == arr_total_precios_tecnologia_ordenado[j]
+      arr_total_nombre_tecnologia_ordenado[j] = arr_total_nombre_tecnologia[i]
+    end
+  end
+end
+
+arr_total_precios_audio_ordenado = arr_total_precios_audio.sort
+arr_total_nombre_audio_ordenado = []
+indiceAudio = arr_total_nombre_audio.length
+(0..indiceAudio - 1).each do |i|
+  (0..indiceAudio - 1).each do |j|
+    if arr_total_precios_audio[i] == arr_total_precios_audio_ordenado[j]
+      arr_total_nombre_audio_ordenado[j] = arr_total_nombre_audio[i]
+    end
+  end
+end
+
+arr_total_precios_instrumentos_ordenado = arr_total_precios_instrumentos.sort
+arr_total_nombre_instrumentos_ordenado = []
+indiceInstrumentos = arr_total_nombre_instrumentos.length
+(0..indiceInstrumentos - 1).each do |i|
+  (0..indiceInstrumentos - 1).each do |j|
+    if arr_total_precios_instrumentos[i] == arr_total_precios_instrumentos_ordenado[j]
+      arr_total_nombre_instrumentos_ordenado[j] = arr_total_nombre_instrumentos[i]
+    end
+  end
+end
+
+arr_total_precios_grabacion_ordenado = arr_total_precios_grabacion.sort
+arr_total_nombre_grabacion_ordenado = []
+indiceGrabacion = arr_total_nombre_grabacion.length
+(0..indiceGrabacion - 1).each do |i|
+  (0..indiceGrabacion - 1).each do |j|
+    if arr_total_precios_grabacion[i] == arr_total_precios_grabacion_ordenado[j]
+      arr_total_nombre_grabacion_ordenado[j] = arr_total_nombre_grabacion[i]
+    end
+  end
+end
+
+arr_total_precios_iluminacion_ordenado = arr_total_precios_iluminacion.sort
+arr_total_nombre_iluminacion_ordenado = []
+indiceIluminacion = arr_total_nombre_iluminacion.length
+(0..indiceIluminacion - 1).each do |i|
+  (0..indiceIluminacion - 1).each do |j|
+    if arr_total_precios_iluminacion[i] == arr_total_precios_iluminacion_ordenado[j]
+      arr_total_nombre_iluminacion_ordenado[j] = arr_total_nombre_iluminacion[i]
+    end
+  end
+end
+######################Ordenar Elementos#########################
+
+######################Arreglos Para Bar Chart#########################
+puts 'steven'
+arr_union_iluminacion_precio = []
+arr_union_iluminacion_precio.push(arr_total_precios_iluminacion_ordenado[0])
+arr_union_iluminacion_precio.push(arr_total_precios_iluminacion_ordenado[-1])
+arr_union_iluminacion_nombre = []
+arr_union_iluminacion_nombre.push(arr_total_nombre_iluminacion_ordenado[0])
+arr_union_iluminacion_nombre.push(arr_total_nombre_iluminacion_ordenado[-1])
+arr_union_iluminacion_categoria = []
+arr_union_iluminacion_categoria.push('iluminacion')
+arr_union_iluminacion_categoria.push('iluminacion')
+
+#/*----------------------------------------------------*/
+puts 'scarlet'
+arr_union_audio_precio = []
+arr_union_audio_precio.push(arr_total_precios_audio_ordenado[0])
+arr_union_audio_precio.push(arr_total_precios_audio_ordenado[-1])
+arr_union_audio_nombre = []
+arr_union_audio_nombre.push(arr_total_nombre_audio_ordenado[0])
+arr_union_audio_nombre.push(arr_total_nombre_audio_ordenado[-1])
+arr_union_audio_categoria = []
+arr_union_audio_categoria.push('audio')
+arr_union_audio_categoria.push('audio')
+#/*----------------------------------------------------*/
+puts 'juan'
+arr_union_tecnologia_precio = []
+arr_union_tecnologia_precio.push(arr_total_precios_tecnologia_ordenado[0])
+arr_union_tecnologia_precio.push(arr_total_precios_tecnologia_ordenado[-1])
+arr_union_tecnologia_nombre = []
+arr_union_tecnologia_nombre.push(arr_total_nombre_tecnologia_ordenado[0])
+arr_union_tecnologia_nombre.push(arr_total_nombre_tecnologia_ordenado[-1])
+arr_union_tecnologia_categoria = []
+arr_union_tecnologia_categoria.push('tecnologia')
+arr_union_tecnologia_categoria.push('tecnologia')
+#/*----------------------------------------------------*/
+puts 'davis'
+arr_union_grabacion_precio = []
+arr_union_grabacion_precio.push(arr_total_precios_grabacion_ordenado[0])
+arr_union_grabacion_precio.push(arr_total_precios_grabacion_ordenado[-1])
+arr_union_grabacion_nombre = []
+arr_union_grabacion_nombre.push(arr_total_nombre_grabacion_ordenado[0])
+arr_union_grabacion_nombre.push(arr_total_nombre_grabacion_ordenado[-1])
+arr_union_grabacion_categoria = []
+arr_union_grabacion_categoria.push('grabacion')
+arr_union_grabacion_categoria.push('grabacion')
+#/*----------------------------------------------------*/
+puts 'choco'
+arr_union_instrumentos_precio = []
+arr_union_instrumentos_precio.push(arr_total_precios_instrumentos_ordenado[0])
+arr_union_instrumentos_precio.push(arr_total_precios_instrumentos_ordenado[-1])
+arr_union_instrumentos_nombre = []
+arr_union_instrumentos_nombre.push(arr_total_nombre_instrumentos_ordenado[0])
+arr_union_instrumentos_nombre.push(arr_total_nombre_instrumentos_ordenado[-1])
+arr_union_instrumentos_categoria = []
+arr_union_instrumentos_categoria.push('instrumentos')
+arr_union_instrumentos_categoria.push('instrumentos')
+
+arr_total_categorias_cb_precios = arr_union_iluminacion_precio + arr_union_audio_precio + arr_union_tecnologia_precio + arr_union_grabacion_precio + arr_union_instrumentos_precio
+
+puts 'separacion'
+puts arr_total_categorias_cb_precios
+
+arr_total_categorias_cb_nombres = arr_union_iluminacion_nombre + arr_union_audio_nombre + arr_union_tecnologia_nombre + arr_union_grabacion_nombre + arr_union_instrumentos_nombre
+
+puts arr_total_categorias_cb_nombres
+
+arr_total_categorias_cb_categorias = arr_union_iluminacion_categoria + arr_union_audio_categoria + arr_union_tecnologia_categoria + arr_union_grabacion_categoria + arr_union_instrumentos_categoria
+######################Arreglos Para Bar Chart#########################
+
+################Ordena Arreglos De Menor A Mayor #####################
+arr_total_categorias_cb_precios_ordenado = arr_total_categorias_cb_precios.sort
+arr_total_categorias_cb_nombres_ordenado = []
+arr_total_categorias_cb_categorias_ordenado = []
+indiceFinal = arr_total_categorias_cb_precios.length
+(0..indiceFinal - 1).each do |i|
+  (0..indiceFinal - 1).each do |j|
+    next unless arr_total_categorias_cb_precios[i] == arr_total_categorias_cb_precios_ordenado[j]
+
+    arr_total_categorias_cb_nombres_ordenado[j] = arr_total_categorias_cb_nombres[i]
+    arr_total_categorias_cb_categorias_ordenado[j] = arr_total_categorias_cb_categorias[i]
+  end
+end
+
+puts arr_total_categorias_cb_categorias_ordenado
+puts arr_total_categorias_cb_precios_ordenado
+puts arr_total_categorias_cb_nombres_ordenado
+
+indiceCB = arr_total_categorias_cb_categorias_ordenado.length
+(0..indiceCB - 1).each do |i|
+  CSV.open('productosCarosBaratos.csv', 'a') do |csv|
+    csv << [arr_total_categorias_cb_nombres_ordenado[i].to_s, arr_total_categorias_cb_precios_ordenado[i].to_f, arr_total_categorias_cb_categorias_ordenado[i].to_s]
+  end
+end
+################Ordena Arreglos De Menor A Mayor #####################
+
+################Ordena Arreglos De 3 En 3#############################
+arr_final_nombres = []
+arr_final_nombres.push(arr_total_nombre_iluminacion_ordenado[0])
+arr_final_nombres.push(arr_total_nombre_audio_ordenado[0])
+arr_final_nombres.push(arr_total_nombre_tecnologia_ordenado[0])
+arr_final_nombres.push(arr_total_nombre_grabacion_ordenado[0])
+arr_final_nombres.push(arr_total_nombre_instrumentos_ordenado[0])
+
+arr_final_nombres.push(arr_total_nombre_iluminacion_ordenado[-1])
+arr_final_nombres.push(arr_total_nombre_audio_ordenado[-1])
+arr_final_nombres.push(arr_total_nombre_tecnologia_ordenado[-1])
+arr_final_nombres.push(arr_total_nombre_grabacion_ordenado[-1])
+arr_final_nombres.push(arr_total_nombre_instrumentos_ordenado[-1])
+
+arr_final_precios = []
+arr_final_precios.push(arr_total_precios_iluminacion_ordenado[0])
+arr_final_precios.push(arr_total_precios_audio_ordenado[0])
+arr_final_precios.push(arr_total_precios_tecnologia_ordenado[0])
+arr_final_precios.push(arr_total_precios_grabacion_ordenado[0])
+arr_final_precios.push(arr_total_precios_instrumentos_ordenado[0])
+
+arr_final_precios.push(arr_total_precios_iluminacion_ordenado[-1])
+arr_final_precios.push(arr_total_precios_audio_ordenado[-1])
+arr_final_precios.push(arr_total_precios_tecnologia_ordenado[-1])
+arr_final_precios.push(arr_total_precios_grabacion_ordenado[-1])
+arr_final_precios.push(arr_total_precios_instrumentos_ordenado[-1])
+
+arr_final_categoria = []
+arr_final_categoria.push('iluminacion')
+arr_final_categoria.push('audio')
+arr_final_categoria.push('tecnologia')
+arr_final_categoria.push('grabacion')
+arr_final_categoria.push('instrumentos')
+
+arr_final_categoria.push('iluminacion')
+arr_final_categoria.push('audio')
+arr_final_categoria.push('tecnologia')
+arr_final_categoria.push('grabacion')
+arr_final_categoria.push('instrumentos')
+
+indiceFinal = arr_final_precios.length
+(0..indiceFinal - 1).each do |i|
+  CSV.open('productosCarosBaratos2.csv', 'a') do |csv|
+    csv << [arr_final_nombres[i].to_s, arr_final_precios[i].to_f, arr_final_categoria[i].to_s]
+  end
+end
+################Ordena Arreglos De 3 En 3#############################

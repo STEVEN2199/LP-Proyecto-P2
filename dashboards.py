@@ -12,6 +12,9 @@ with open('top3categorias.csv','r') as csvfile:
     for row in plots:
         x.append(row[0])
         y.append(row[1])
+
+print(x)
+print(y)
   
 plt.bar(y, x, color = 'g', width = 0.5, label = "Precios")
 #plt.xticks(x, rotation='vertical', size=10)
